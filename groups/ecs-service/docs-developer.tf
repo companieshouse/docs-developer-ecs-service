@@ -68,7 +68,7 @@ resource "aws_lb_target_group" "docs-developer-target_group" {
 
 resource "aws_lb_listener_rule" "docs-developer" {
   listener_arn = local.dev_site_lb_listener_arn
-  priority     = 1
+  priority     = 100
   action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.docs-developer-target_group.arn
