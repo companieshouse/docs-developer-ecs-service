@@ -17,3 +17,4 @@ cache_server = "cidev-chs-elasticache.9vgugg.ng.0001.euw2.cache.amazonaws.com:63
 cookie_domain = "cidev.aws.chdev.org"
 oauth2_redirect_uri = "https://dev-ecs.cidev.aws.chdev.org/oauth2/user/callback"
 oauth2_auth_uri = "https://account.cidev.aws.chdev.org/oauth2/authorise"
+redirect_uri = "https://dev-ecs.cidev.aws.chdev.org"
