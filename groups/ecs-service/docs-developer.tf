@@ -5,8 +5,8 @@ resource "aws_ecs_service" "docs-developer-ecs-service" {
   desired_count   = var.desired_task_count
   load_balancer {
     target_group_arn = aws_lb_target_group.docs-developer-target_group.arn
-    container_port   = local.docs_developer_port
-    container_name   = "docs-developer"
+    container_port   = local.container_port
+    container_name   = local.service_name
   }
 }
 
@@ -18,12 +18,12 @@ resource "aws_ecs_task_definition" "docs-developer-task-definition" {
         {
             "environment": ${jsonencode(local.task_environment)},
             "name": "${local.service_name}",
-            "image": "${var.docker_registry}/local/docs.developer.ch.gov.uk:${var.docs_developer_version}",
+            "image": "${var.docker_registry}/${local.docker_repo}:${var.docs_developer_version}",
             "cpu": ${var.required_cpus},
             "memory": ${var.required_memory},
             "mountPoints": [],
             "portMappings": [{
-                "containerPort": ${local.docs_developer_port},
+                "containerPort": ${local.container_port},
                 "hostPort": 0,
                 "protocol": "tcp"
             }],
@@ -46,7 +46,7 @@ resource "aws_ecs_task_definition" "docs-developer-task-definition" {
 
 resource "aws_lb_target_group" "docs-developer-target_group" {
   name     = "${var.environment}-${local.service_name}"
-  port     = local.docs_developer_port
+  port     = local.container_port
   protocol = "HTTP"
   vpc_id   = local.vpc_id
   health_check {
@@ -62,15 +62,15 @@ resource "aws_lb_target_group" "docs-developer-target_group" {
 }
 
 resource "aws_lb_listener_rule" "docs-developer" {
-  listener_arn = local.dev_site_lb_listener_arn
-  priority     = 100
+  listener_arn = local.lb_listener_arn
+  priority     = local.lb_listener_rule_priority
   action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.docs-developer-target_group.arn
   }
   condition {
     path_pattern {
-      values = ["/*"]
+      values = local.lb_listener_paths
     }
   }
 }
