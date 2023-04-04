@@ -13,40 +13,58 @@ resource "aws_ecs_service" "docs-developer-ecs-service" {
 resource "aws_ecs_task_definition" "docs-developer-task-definition" {
   family                = "${var.environment}-${local.service_name}"
   execution_role_arn    = local.task_execution_role_arn
-  container_definitions = templatefile(
-    "${path.module}/${local.service_name}-task-definition.tmpl",
-    merge( # pass in a map of variables required for the service's container definitions template merged with the secrets arn map
-      {
-        service_name               : local.service_name
-        name_prefix                : local.name_prefix
-        aws_region                 : var.aws_region
-        docker_registry            : var.docker_registry
-        required_cpus              : var.required_cpus
-        required_memory            : var.required_memory
-
-        # docs developer specific configs
-        docs_developer_port        : local.docs_developer_port
-        docs_developer_version     : var.docs_developer_version
-        log_level                  : var.log_level
-        cdn_host                   : var.cdn_host
-        chs_url                    : var.chs_url
-        account_local_url          : var.account_local_url
-        dev_specs_url              : var.dev_specs_url
-        piwik_url                  : var.piwik_url
-        piwik_site_id              : var.piwik_site_id
-        redirect_uri               : var.redirect_uri
-        cache_pool_size            : var.cache_pool_size
-        cache_server               : var.cache_server
-        cookie_domain              : var.cookie_domain
-        cookie_name                : var.cookie_name
-        cookie_secure_only         : var.cookie_secure_only
-        default_session_expiration : var.default_session_expiration
-        oauth2_redirect_uri        : var.oauth2_redirect_uri
-        oauth2_auth_uri            : var.oauth2_auth_uri
-      },
-        local.secrets_arn_map
-    )
-  )
+  container_definitions    = <<DEFINITION
+    [
+        {
+            "environment": [
+                { "name": "DOC_DEVELOPER_SERVICE_PORT", "value": "${local.docs_developer_port}" },
+                { "name": "LOGLEVEL", "value": "${var.log_level}" },
+                { "name": "CDN_HOST", "value": "${var.cdn_host}" },
+                { "name": "CHS_URL", "value": "${var.chs_url}" },
+                { "name": "ACCOUNT_LOCAL_URL", "value": "${var.account_local_url}" },
+                { "name": "DEVELOPER_SPECS_URL", "value": "${var.dev_specs_url}" },
+                { "name": "PIWIK_URL", "value": "${var.piwik_url}" },
+                { "name": "PIWIK_SITE_ID", "value": "${var.piwik_site_id}" },
+                { "name": "REDIRECT_URI", "value": "${var.redirect_uri}" },
+                { "name": "CACHE_POOL_SIZE", "value": "${var.cache_pool_size}" },
+                { "name": "CACHE_SERVER", "value": "${var.cache_server}" },
+                { "name": "COOKIE_DOMAIN", "value": "${var.cookie_domain}" },
+                { "name": "COOKIE_NAME", "value": "${var.cookie_name}" },
+                { "name": "COOKIE_SECURE_ONLY", "value": "${var.cookie_secure_only}" },
+                { "name": "DEFAULT_SESSION_EXPIRATION", "value": "${var.default_session_expiration}" },
+                { "name": "OAUTH2_REDIRECT_URI", "value": "${var.oauth2_redirect_uri}" },
+                { "name": "OAUTH2_AUTH_URI", "value": "${var.oauth2_auth_uri}" }
+            ],
+            "name": "${local.service_name}",
+            "image": "${var.docker_registry}/local/docs.developer.ch.gov.uk:${var.docs_developer_version}",
+            "cpu": ${var.required_cpus},
+            "memory": ${var.required_memory},
+            "mountPoints": [],
+            "portMappings": [{
+                "containerPort": ${local.docs_developer_port},
+                "hostPort": 0,
+                "protocol": "tcp"
+            }],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-create-group": "true",
+                    "awslogs-region": "${var.aws_region}",
+                    "awslogs-group": "/ecs/${local.name_prefix}/${local.service_name}",
+                    "awslogs-stream-prefix": "ecs"
+                }
+            },
+            "secrets": [
+                { "name": "CHS_DEVELOPER_CLIENT_ID", "valueFrom": "${local.secrets_arn_map.web-oauth2-client-id}" },
+                { "name": "CHS_DEVELOPER_CLIENT_SECRET", "valueFrom": "${local.secrets_arn_map.web-oauth2-client-secret}" },
+                { "name": "COOKIE_SECRET", "valueFrom": "${local.secrets_arn_map.web-oauth2-cookie-secret}" },
+                { "name": "DEVELOPER_OAUTH2_REQUEST_KEY", "valueFrom": "${local.secrets_arn_map.web-oauth2-request-key}" }
+            ],
+            "volumesFrom": [],
+            "essential": true
+        }
+    ]
+  DEFINITION
 }
 
 resource "aws_lb_target_group" "docs-developer-target_group" {
