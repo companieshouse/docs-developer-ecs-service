@@ -8,11 +8,6 @@ locals {
   lb_listener_rule_priority = 100
   lb_listener_paths         = ["/*"]
 
-  vpc_id                    = data.terraform_remote_state.networks.outputs.vpc_id
-  lb_listener_arn           = data.aws_lb_listener.dev-site-lb-listener.arn
-  ecs_cluster_id            = data.aws_ecs_cluster.ecs-cluster.id
-  task_execution_role_arn   = data.aws_iam_role.ecs-cluster-iam-role.arn
-
   # create a map of secret name => secret arn to pass into ecs service module
   # using the trimprefix function to remove the prefixed path from the secret name
   secrets_arn_map = {
