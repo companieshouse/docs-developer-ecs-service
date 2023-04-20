@@ -8,7 +8,7 @@ terraform {
 }
 
 module "ecs-service" {
-  source = "./module-ecs-service"
+  source = "git::git@github.com:companieshouse/terraform-library-ecs-service.git?ref=1.0.0"
 
   # Environmental configuration
   environment             = var.environment
