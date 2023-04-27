@@ -47,27 +47,25 @@ variable "docker_registry" {
 # ------------------------------------------------------------------------------
 # Service performance and scaling configs
 # ------------------------------------------------------------------------------
-
 variable "desired_task_count" {
   type = number
   description = "The desired ECS task count for this service"
-  default = 1
+  default = 1 # defaulted low for dev environments, override for production
 }
 variable "required_cpus" {
   type = number
-  description = "The required cpu count for this service"
-  default = 1
+  description = "The required cpu resource for this service. 1024 here is 1 vCPU"
+  default = 128 # defaulted low for dev environments, override for production
 }
 variable "required_memory" {
   type = number
   description = "The required memory for this service"
-  default = 512
+  default = 128 # defaulted low for dev environments, override for production
 }
 
 # ------------------------------------------------------------------------------
 # Service environment variable configs
 # ------------------------------------------------------------------------------
-
 variable "log_level" {
   default     = "info"
   type        = string
