@@ -46,7 +46,7 @@ variable "docker_registry" {
 
 variable "docker_repo" {
   type        = string
-  default     = ""
+  default     = "ecs-docs-developer-web"
   description = "Name and path to the ecr image, if empty, will default to local variable"
 }
 
