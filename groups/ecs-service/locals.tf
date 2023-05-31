@@ -4,7 +4,7 @@ locals {
   name_prefix               = "${local.stack_name}-${var.environment}"
   service_name              = "docs-developer"
   container_port            = "8080" # default tomcat port required here until prod docker container is built allowing port change via env var
-  docker_repo               = var.docker_repo
+  docker_repo               = "docs.developer.ch.gov.uk"
   lb_listener_rule_priority = 100
   lb_listener_paths         = ["/*"]
 
