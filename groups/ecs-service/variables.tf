@@ -44,12 +44,6 @@ variable "docker_registry" {
   description = "The FQDN of the Docker registry."
 }
 
-variable "docker_repo" {
-  type        = string
-  default     = "ecs-docs-developer-web"
-  description = "Name and path to the ecr image, if empty, will default to local variable"
-}
-
 # ------------------------------------------------------------------------------
 # Service performance and scaling configs
 # ------------------------------------------------------------------------------
