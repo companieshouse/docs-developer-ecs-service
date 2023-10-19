@@ -4,7 +4,7 @@ provider "aws" {
 
 terraform {
   backend "s3" {}
-  required_version = "~> 0.13"
+  required_version = "~> 1.3"
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -23,7 +23,7 @@ module "ecs-service" {
   # Environmental configuration
   environment             = var.environment
   aws_region              = var.aws_region
-  vpc_id                  = data.terraform_remote_state.networks.outputs.vpc_id
+  vpc_id                  = data.aws_vpc.vpc.id
   ecs_cluster_id          = data.aws_ecs_cluster.ecs-cluster.id
   task_execution_role_arn = data.aws_iam_role.ecs-cluster-iam-role.arn
 
