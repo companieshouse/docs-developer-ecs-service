@@ -18,3 +18,7 @@ cookie_domain = "company-information.service.gov.uk"
 oauth2_redirect_uri = "https://developer-staging.company-information.service.gov.uk/oauth2/user/callback"
 oauth2_auth_uri = "https://identity-staging.company-information.service.gov.uk/oauth2/authorise"
 redirect_uri = "https://developer-staging.company-information.service.gov.uk"
+
+# Scheduled scaling of tasks
+service_scaledown_schedule = "55 19 * * ? *"
+service_scaleup_schedule   = "5 6 * * ? *"
