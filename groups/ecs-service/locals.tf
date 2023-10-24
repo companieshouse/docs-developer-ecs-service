@@ -5,7 +5,7 @@ locals {
   service_name              = "docs-developer"
   container_port            = "8080" # default tomcat port required here until prod docker container is built allowing port change via env var
   docker_repo               = "docs.developer.ch.gov.uk"
-  lb_listener_rule_priority = 100
+  lb_listener_rule_priority = 10
   lb_listener_paths         = ["/*"]
   vpc_name                  = data.aws_ssm_parameter.secret[format("/%s/%s", local.name_prefix, "vpc-name")].value
 
