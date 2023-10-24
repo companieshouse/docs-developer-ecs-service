@@ -18,7 +18,7 @@ terraform {
 }
 
 module "ecs-service" {
-  source = "git@github.com:companieshouse/terraform-modules//aws/ecs/ecs-service?ref=1.0.206"
+  source = "git@github.com:companieshouse/terraform-modules//aws/ecs/ecs-service?ref=1.0.208"
 
   # Environmental configuration
   environment             = var.environment
@@ -28,10 +28,11 @@ module "ecs-service" {
   task_execution_role_arn = data.aws_iam_role.ecs-cluster-iam-role.arn
 
   # Load balancer configuration
-  lb_listener_arn           = data.aws_lb_listener.dev-site-lb-listener.arn
-  lb_listener_rule_priority = local.lb_listener_rule_priority
-  lb_listener_paths         = local.lb_listener_paths
-  healthcheck_path          = "/"
+  lb_listener_arn                   = data.aws_lb_listener.dev-site-lb-listener.arn
+  lb_listener_rule_priority         = local.lb_listener_rule_priority
+  lb_listener_paths                 = local.lb_listener_paths
+  healthcheck_path                  = "/"
+  health_check_grace_period_seconds = 240
 
   # Docker container details
   docker_registry   = var.docker_registry
