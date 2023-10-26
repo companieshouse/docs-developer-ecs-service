@@ -9,6 +9,10 @@ locals {
   lb_listener_rule_priority = 10
   lb_listener_paths         = ["/*"]
   vpc_name                  = data.aws_ssm_parameter.secret[format("/%s/%s", local.name_prefix, "vpc-name")].value
+  environment_files         = [{
+    "value" : data.vault_generic_secret.shared_s3.data["config_bucket_name"],
+    "type"  : "s3"
+  }]
 
 
   # create a map of secret name => secret arn to pass into ecs service module
