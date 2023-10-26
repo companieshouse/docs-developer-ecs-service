@@ -33,6 +33,7 @@ module "ecs-service" {
   lb_listener_paths                 = local.lb_listener_paths
   healthcheck_path                  = "/"
   health_check_grace_period_seconds = 240
+  healthcheck_healthy_threshold     = "2"
 
   # Docker container details
   docker_registry   = var.docker_registry
