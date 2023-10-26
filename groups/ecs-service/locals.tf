@@ -30,7 +30,6 @@ locals {
   task_secrets = concat(local.global_secret_list,[
     { "name" : "CHS_DEVELOPER_CLIENT_ID", "valueFrom" : local.secrets_arn_map.web-oauth2-client-id },
     { "name" : "CHS_DEVELOPER_CLIENT_SECRET", "valueFrom" : local.secrets_arn_map.web-oauth2-client-secret },
-    { "name" : "COOKIE_SECRET", "valueFrom" : local.secrets_arn_map.web-oauth2-cookie-secret },
     { "name" : "DEVELOPER_OAUTH2_REQUEST_KEY", "valueFrom" : local.secrets_arn_map.web-oauth2-request-key }
   ])
 
