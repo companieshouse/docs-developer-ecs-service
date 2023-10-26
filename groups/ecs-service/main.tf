@@ -33,6 +33,7 @@ module "ecs-service" {
   lb_listener_paths                 = local.lb_listener_paths
   healthcheck_path                  = "/"
   health_check_grace_period_seconds = 240
+  healthcheck_healthy_threshold     = "2"
 
   # Docker container details
   docker_registry   = var.docker_registry
@@ -55,6 +56,7 @@ module "ecs-service" {
   service_scaleup_schedule           = var.service_scaleup_schedule
 
   # Service environment variable and secret configs
-  task_environment = local.task_environment
-  task_secrets     = local.task_secrets
+  task_environment  = local.task_environment
+  task_secrets      = local.task_secrets
+  environment_files = local.environment_files
 }
