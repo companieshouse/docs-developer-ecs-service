@@ -18,7 +18,7 @@ terraform {
 }
 
 module "ecs-service" {
-  source = "git@github.com:companieshouse/terraform-modules//aws/ecs/ecs-service?ref=1.0.208"
+  source = "git@github.com:companieshouse/terraform-modules//aws/ecs/ecs-service?ref=1.0.209"
 
   # Environmental configuration
   environment             = var.environment
@@ -54,6 +54,7 @@ module "ecs-service" {
   service_autoscale_target_value_cpu = var.service_autoscale_target_value_cpu
   service_scaledown_schedule         = var.service_scaledown_schedule
   service_scaleup_schedule           = var.service_scaleup_schedule
+  use_capacity_provider              = var.use_capacity_provider
 
   # Service environment variable and secret configs
   task_environment = local.task_environment

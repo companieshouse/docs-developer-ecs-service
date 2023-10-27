@@ -5,6 +5,9 @@ deploy_to = "development"
 state_prefix = "env:/development"
 aws_profile = "development-eu-west-2"
 
+required_memory = 512
+max_task_count = 8
+
 # service configs
 log_level = "trace"
 cdn_host = "d3uvya5a8a1ncx.cloudfront.net"
