@@ -9,8 +9,9 @@ locals {
   lb_listener_rule_priority = 10
   lb_listener_paths         = ["/*"]
   vpc_name                  = data.aws_ssm_parameter.secret[format("/%s/%s", local.name_prefix, "vpc-name")].value
+  s3_config_bucket          = data.vault_generic_secret.shared_s3.data["config_bucket_name"]
   environment_files         = [{
-    "value" : data.vault_generic_secret.shared_s3.data["config_bucket_name"],
+    "value" : "arn:aws:s3:::${local.s3_config_bucket}/ecs-service-configs/${var.aws_profile}/${var.environment}/global_vars.env",
     "type"  : "s3"
   }]
 
