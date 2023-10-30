@@ -67,6 +67,11 @@ variable "required_memory" {
   description = "The required memory for this service"
   default = 256 # defaulted low for java service in dev environments, override for production
 }
+variable "use_capacity_provider" {
+  type        = bool
+  description = "Whether to use a capacity provider instead of setting a launch type for the service"
+  default     = true
+}
 variable "service_autoscale_enabled" {
   type        = bool
   description = "Whether to enable service autoscaling, including scheduled autoscaling"
