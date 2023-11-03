@@ -96,6 +96,12 @@ variable "service_scaleup_schedule" {
 # ------------------------------------------------------------------------------
 # Service environment variable configs
 # ------------------------------------------------------------------------------
+variable "use_set_environment_files" {
+  type        = bool
+  default     = false
+  description = "Toggle default global and shared  environment files"
+}
+
 variable "log_level" {
   default     = "info"
   type        = string

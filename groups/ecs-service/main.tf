@@ -58,7 +58,10 @@ module "ecs-service" {
   use_capacity_provider              = var.use_capacity_provider
 
   # Service environment variable and secret configs
-  task_environment  = local.task_environment
-  task_secrets      = local.task_secrets
-  environment_files = local.environment_files
+  task_environment            = local.task_environment
+  task_secrets                = local.task_secrets
+  environment_files           = local.environment_files
+  environment_file_arn_prefix = local.environment_file_arn_prefix
+  app_environment_filename    = local.app_environment_filename
+  use_set_environment_files   = local.use_set_environment_files
 }

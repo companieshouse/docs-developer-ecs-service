@@ -1,16 +1,19 @@
 # Define all hardcoded local variable and local variables looked up from data resources
 locals {
-  stack_name                = "developer-site" # this must match the stack name the service deploys into
-  name_prefix               = "${local.stack_name}-${var.environment}"
-  global_prefix             = "global-${var.environment}"
-  service_name              = "docs-developer"
-  container_port            = "8080" # default tomcat port required here until prod docker container is built allowing port change via env var
-  docker_repo               = "docs.developer.ch.gov.uk"
-  lb_listener_rule_priority = 10
-  lb_listener_paths         = ["/*"]
-  vpc_name                  = data.aws_ssm_parameter.secret[format("/%s/%s", local.name_prefix, "vpc-name")].value
-  s3_config_bucket          = data.vault_generic_secret.shared_s3.data["config_bucket_name"]
-  environment_files         = [{
+  stack_name                  = "developer-site" # this must match the stack name the service deploys into
+  name_prefix                 = "${local.stack_name}-${var.environment}"
+  global_prefix               = "global-${var.environment}"
+  service_name                = "docs-developer"
+  container_port              = "8080" # default tomcat port required here until prod docker container is built allowing port change via env var
+  docker_repo                 = "docs.developer.ch.gov.uk"
+  lb_listener_rule_priority   = 10
+  lb_listener_paths           = ["/*"]
+  vpc_name                    = data.aws_ssm_parameter.secret[format("/%s/%s", local.name_prefix, "vpc-name")].value
+  s3_config_bucket            = data.vault_generic_secret.shared_s3.data["config_bucket_name"]
+  environment_file_arn_prefix = "arn:aws:s3:::${local.s3_config_bucket}/ecs-service-configs/${var.aws_profile}/${var.environment}"
+  app_environment_filename    = "docs.developer.ch.gov.uk.env"
+  use_set_environment_files   = var.use_set_environment_files
+  environment_files           = [{
     "value" : "arn:aws:s3:::${local.s3_config_bucket}/ecs-service-configs/${var.aws_profile}/${var.environment}/global_vars.env",
     "type"  : "s3"
   }]
